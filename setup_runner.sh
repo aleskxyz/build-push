@@ -31,6 +31,7 @@ sudo chmod u-s /usr/bin/newuidmap
 sudo chmod u-s /usr/bin/newgidmap
 sudo podman system reset -f
 echo -e "[storage]\ndriver = \"vfs\"" | sudo tee /etc/containers/storage.conf > /dev/null
+sudo podman system reset -f
 mkdir -p "$HOME/.docker"
 echo "::endgroup::"
 echo "::notice::Configuration completed successfully."
