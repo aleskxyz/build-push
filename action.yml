@@ -1,0 +1,146 @@
+name: Build and Push Docker Image to Container Registry
+
+description: >
+  This GitHub Action builds Docker images with customized image tags, labels, and annotations, and pushes them to a specified
+  container registry. It is designed to run in a rootless, unprivileged container for enhanced security, including environments 
+  like self-hosted GitHub Action Runner Controller (ARC) on Kubernetes.
+
+author: aleskxyz
+
+inputs:
+  image_name:
+    description: Name of the Docker image to be built and pushed.
+    required: true
+
+  registry_address:
+    description: URL of the container registry where the image will be pushed.
+    required: true
+
+  registry_username:
+    description: Username for authentication with the container registry.
+    required: true
+
+  registry_password:
+    description: Password for authentication with the container registry.
+    required: true
+
+  context:
+    description: The directory path used as the build context. Default is the current directory (`.`).
+    required: false
+    default: './'
+
+  dockerfile_path:
+    description: Location of the Dockerfile. Defaults to `./Dockerfile`.
+    required: false
+    default: 'Dockerfile'
+
+  flavor:
+    description: >
+      Specifies the tagging strategy. For options, see Docker Metadata Action documentation at 
+      https://github.com/docker/metadata-action?tab=readme#flavor-input.
+    required: false
+
+  tags:
+    description: >
+      Defines how the image is tagged. For detailed configuration, refer to Docker Metadata Action documentation at 
+      https://github.com/docker/metadata-action?tab=readme#tags-input.
+    required: false
+    default: |
+      type=sha
+      type=ref,event=branch
+      type=ref,event=pr
+      type=schedule,pattern={{date 'YYYYMMDD-hhmmss'}}
+      type=semver,pattern={{version}}
+      type=semver,pattern={{major}}.{{minor}}
+      type=semver,pattern={{major}},enable=${{ !startsWith(github.ref, 'refs/tags/v0.') }}
+
+  labels:
+    description: Custom labels to apply to the built image, separated by newlines.
+    required: false
+
+  annotations:
+    description: Additional annotations for the image, separated by newlines.
+    required: false
+
+  archs:
+    description: CPU architectures to target during the build, separated by commas.
+    required: false
+
+  platforms:
+    description: Target platforms for the image build, separated by commas.
+    required: false
+
+  build_args:
+    description: >
+      Build-time variables in the form arg_name=arg_value. Separate multiple arguments with newlines. 
+      These are passed to Docker build with --build-arg.
+    required: false
+
+  buildah_extra_args:
+    description: Additional arguments for the `buildah bud` command, separated by newlines.
+    required: false
+    default: '--isolation chroot'
+
+  oci:
+    description: >
+      Sets the image format. true for OCI format, false for Docker format. Default is false.
+    required: false
+    default: false
+
+  push_extra_args:
+    description: Extra arguments for the `podman push` command, separated by newlines.
+    required: false
+
+outputs:
+  push_result:
+    description: JSON string with the digest and registry paths for pushed images.
+    value: ${{ toJSON(steps.push.outputs) }}
+
+runs:
+  using: composite
+  steps:
+  - name: Setup Build Environment
+    run: ${GITHUB_ACTION_PATH}/setup_runner.sh
+    shell: bash
+
+  - name: Log in to registry
+    uses: redhat-actions/podman-login@v1
+    with:
+      registry: ${{ inputs.registry_address }}
+      username: ${{ inputs.registry_username }}
+      password: ${{ inputs.registry_password }}
+
+  - name: Generate Docker Metadata
+    id: metadata
+    uses: docker/metadata-action@v5
+    with:
+      images: ${{ inputs.registry_address }}/${{ inputs.image_name }}
+      tags: ${{ inputs.image_tags }}
+      flavor: ${{ inputs.flavor }}
+      labels: ${{ inputs.labels }}
+      annotations: ${{ inputs.annotations }}
+
+  - name: Build Docker Image
+    id: build_image
+    uses: redhat-actions/buildah-build@v2
+    with:
+      tags: ${{ steps.metadata.outputs.tags }}
+      labels: ${{ steps.metadata.outputs.labels }}
+      oci: ${{ inputs.oci }}
+      containerfiles: ${{ inputs.dockerfile_path }}
+      context: ${{ inputs.context }}
+      archs: ${{ inputs.archs }}
+      platforms: ${{ inputs.platforms }}
+      build-args: $${{ inputs.build_args }}
+      extra-args: ${{ inputs.buildah_extra_args }}
+
+  - name: Push Image to Registry
+    uses: redhat-actions/push-to-registry@v2
+    with:
+      image: ${{ steps.build_image.outputs.image }}
+      tags: ${{ steps.build_image.outputs.tags }}
+      extra-args: ${{ inputs.push_extra_args }}
+
+branding:
+  icon: check
+  color: blue
