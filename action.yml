@@ -131,6 +131,7 @@ runs:
       extra-args: ${{ inputs.buildah_extra_args }}
 
   - name: Push Image to Registry
+    id: push
     uses: redhat-actions/push-to-registry@v2
     with:
       image: ${{ steps.build_image.outputs.image }}
