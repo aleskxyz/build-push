@@ -40,27 +40,26 @@ This is a composite GitHub Action that incorporates the following actions:
 
 ```yaml
 name: Build image and Push to  Github Container Registry
-
 on:
   push:
-
 jobs:
   build-push-ghcr:
     name: Build and push image
     runs-on: ubuntu-22.04
-
-steps:
-- name: Checkout
-  uses: actions/checkout@v4
-
-- name: Build and Push Docker image to GHCR
-  uses: aleskxyz/build-push@v1
-  with:
-    image_name: ${{ github.event.repository.name }}
-    registry_address: ghcr.io/${{ github.repository_owner }}
-    registry_username: ${{ github.actor }}
-    registry_password: ${{ github.token }}
-    oci: true
-    push_extra_args: |
-      --disable-content-trust
+    permissions:
+      contents: read
+      packages: write
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Build and Push Docker image to GHCR
+      uses: aleskxyz/build-push@main
+      with:
+        image_name: ${{ github.event.repository.name }}
+        registry_address: ghcr.io/${{ github.repository_owner }}
+        registry_username: ${{ github.actor }}
+        registry_password: ${{ github.token }}
+        oci: true
+        push_extra_args: |
+          --disable-content-trust
 ```

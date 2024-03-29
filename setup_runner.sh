@@ -7,7 +7,7 @@ missing_packages=false
 echo "::group::Checking Package Installation"
 for pkg in "${packages[@]}"; do
     if ! dpkg -s "$pkg" &> /dev/null; then
-        echo "::warning::Package $pkg is not installed."
+        echo "::notice::Package $pkg is not installed."
         missing_packages=true
     else
         echo "Package $pkg is already installed."
