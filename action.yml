@@ -139,7 +139,7 @@ runs:
       extra-args: ${{ inputs.push_extra_args }}
 
   - name: Print Push Result
-    run: echo "Push Result: ${{ steps.push.outputs }}"
+    run: "echo 'Push Result: ${{ steps.push.outputs }}'"
     shell: bash
 
 branding:
