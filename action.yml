@@ -1,6 +1,6 @@
 name: Build and Push Docker Image to Container Registry
 description: >
-  This GitHub Action builds Docker images, adds tags, labels, and annotations, and pushes them to a registry, securely running rootless in ARC on Kubernetes.
+  Builds Docker images, adds tags/labels/annotations, and pushes them to a registry, running rootless in ARC on Kubernetes.
 author: aleskxyz
 
 inputs:
