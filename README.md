@@ -1,4 +1,4 @@
-# Build and Push Docker Image to Container Registry
+# build-push
 
 Builds Docker images with customized image tags, labels, and annotations, and pushes them to a specified container registry. It is designed to run in a rootless, unprivileged container for enhanced security, including environments like self-hosted GitHub Action Runner Controller (ARC) on Kubernetes.
 
