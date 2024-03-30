@@ -58,7 +58,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Build and Push Docker image to GHCR
-      uses: aleskxyz/build-push@main
+      uses: aleskxyz/build-push@v1
       with:
         image_name: ${{ github.event.repository.name }}
         registry_address: ghcr.io/${{ github.repository_owner }}
