@@ -7,7 +7,7 @@ missing_packages=false
 echo "::group::Checking Package Installation"
 for pkg in "${packages[@]}"; do
     if ! dpkg -s "$pkg" &> /dev/null; then
-        echo "::notice::Package $pkg is not installed."
+        echo "Package $pkg is not installed."
         missing_packages=true
     else
         echo "Package $pkg is already installed."
@@ -21,7 +21,7 @@ if [ "$missing_packages" = true ]; then
     sudo apt-get -y install "${packages[@]}"
     echo "::endgroup::"
 else
-    echo "::notice::All packages are already installed."
+    echo "All packages are already installed."
 fi
 
 echo "::group::Applying Additional Configurations"
@@ -33,4 +33,4 @@ sudo rm -rf ~/.local/share/containers/
 echo -e "[storage]\ndriver = \"vfs\"" | sudo tee /etc/containers/storage.conf > /dev/null
 mkdir -p "$HOME/.docker"
 echo "::endgroup::"
-echo "::notice::Configuration completed successfully."
+echo "Configuration completed successfully."
