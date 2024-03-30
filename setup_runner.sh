@@ -6,7 +6,7 @@ multiarch_packages=("qemu" "binfmt-support" "qemu-user-static")
 archs="${INPUT_ARCHS}"
 platforms="${INPUT_PLATFORMS}"
 missing_packages=()
-env
+
 # Validate input
 if [ -n "$archs" ] && [ -n "$platforms" ]; then
     echo "::error::Both 'archs' and 'platforms' are set. Please specify only one."
