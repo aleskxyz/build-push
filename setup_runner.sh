@@ -47,7 +47,10 @@ sudo setcap cap_setuid+eip /usr/bin/newuidmap
 sudo setcap cap_setgid+eip /usr/bin/newgidmap
 sudo chmod u-s /usr/bin/newuidmap
 sudo chmod u-s /usr/bin/newgidmap
-sudo rm -rf ~.local/share/containers/storage/libpod/bolt_state.db
+if [ ! -f ~/.local/share/containers/.clean ]; then
+    sudo rm -rf ~/.local/share/containers/*
+    sudo touch ~/.local/share/containers/.clean
+fi
 echo -e "[storage]\ndriver = \"vfs\"" | sudo tee /etc/containers/storage.conf > /dev/null
 mkdir -p "$HOME/.docker"
 echo "::endgroup::"
