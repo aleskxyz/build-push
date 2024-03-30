@@ -4,18 +4,18 @@ set -e
 basic_packages=("buildah" "uidmap" "libcap2" "libcap2-bin" "podman")
 multiarch_packages=("qemu" "binfmt-support" "qemu-user-static")
 archs="${INPUT_ARCHS}"
-platform="${INPUT_PLATFORM}"
+platforms="${INPUT_PLATFORMS}"
 missing_packages=()
 
 # Validate input
-if [ -n "$archs" ] && [ -n "$platform" ]; then
-    echo "::error::Both 'archs' and 'platform' are set. Please specify only one."
+if [ -n "$archs" ] && [ -n "$platforms" ]; then
+    echo "::error::Both 'archs' and 'platforms' are set. Please specify only one."
     exit 1
 fi
 
 # Determine all required packages based on inputs
 required_packages=("${basic_packages[@]}")
-if [ -n "$archs" ] || [ -n "$platform" ]; then
+if [ -n "$archs" ] || [ -n "$platforms" ]; then
     required_packages+=("${multiarch_packages[@]}")
 fi
 
