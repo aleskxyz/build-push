@@ -129,6 +129,7 @@ runs:
       platforms: ${{ inputs.platforms }}
       build-args: $${{ inputs.build_args }}
       extra-args: ${{ inputs.buildah_extra_args }}
+      layers: true
 
   - name: Push Image to Registry
     id: push
