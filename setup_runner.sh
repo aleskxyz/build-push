@@ -49,6 +49,7 @@ sudo chmod u-s /usr/bin/newuidmap
 sudo chmod u-s /usr/bin/newgidmap
 if [ ! -f ~/.local/share/containers/.clean ]; then
     sudo rm -rf ~/.local/share/containers/*
+    mkdir -p ~/.local/share/containers/
     sudo touch ~/.local/share/containers/.clean
 fi
 echo -e "[storage]\ndriver = \"vfs\"" | sudo tee /etc/containers/storage.conf > /dev/null
