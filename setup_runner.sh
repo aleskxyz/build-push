@@ -29,7 +29,6 @@ sudo setcap cap_setuid+eip /usr/bin/newuidmap
 sudo setcap cap_setgid+eip /usr/bin/newgidmap
 sudo chmod u-s /usr/bin/newuidmap
 sudo chmod u-s /usr/bin/newgidmap
-sudo podman system reset -f
 sudo rm -rf ~/.local/share/containers/
 echo -e "[storage]\ndriver = \"vfs\"" | sudo tee /etc/containers/storage.conf > /dev/null
 mkdir -p "$HOME/.docker"
