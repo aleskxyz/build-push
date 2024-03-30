@@ -102,6 +102,9 @@ runs:
   - name: Setup Build Environment
     run: ${GITHUB_ACTION_PATH}/setup_runner.sh
     shell: bash
+    env:
+      INPUT_ARCHS: ${{ inputs.archs }}
+      INPUT_PLATFORMS: ${{ inputs.platforms }}
 
   - name: Log in to registry
     uses: redhat-actions/podman-login@v1
