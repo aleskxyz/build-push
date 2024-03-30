@@ -75,7 +75,6 @@ inputs:
   buildah_extra_args:
     description: Additional arguments for the `buildah bud` command, separated by newlines.
     required: false
-    default: '--isolation chroot'
 
   oci:
     description: >
@@ -95,6 +94,11 @@ outputs:
 runs:
   using: composite
   steps:
+
+  - name: Export BUILDAH_ISOLATION Environment Variable
+    run: echo "BUILDAH_ISOLATION=chroot" >> $GITHUB_ENV
+    shell: bash
+
   - name: Setup Build Environment
     run: ${GITHUB_ACTION_PATH}/setup_runner.sh
     shell: bash

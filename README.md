@@ -26,7 +26,7 @@ This is a composite GitHub Action that incorporates the following actions:
 | `archs` | CPU architectures to target during the build, separated by commas (eg: `amd64,arm64`). **Note: Not functional in Kubernetes (ARC). Cannot be used with `platforms`.** | No | - |
 | `platforms` | Target platforms for the image build, separated by commas (eg: `linux/amd64,linux/arm64`). **Note: Not functional in Kubernetes (ARC). Cannot be used with `archs`.** | No | - |
 | `build_args` | Build-time variables in the form arg_name=arg_value. Separate multiple arguments with newlines. These are passed to Docker build with --build-arg. | No | - |
-| `buildah_extra_args` | Additional arguments for the `buildah bud` command, separated by newlines. | No | `--isolation chroot` |
+| `buildah_extra_args` | Additional arguments for the `buildah bud` command, separated by newlines. | No | - |
 | `oci` | Sets the image format. `true` for OCI format, `false` for Docker format. Default is false. | No | `false` |
 | `push_extra_args` | Extra arguments for the `podman push` command, separated by newlines. | No | - |
 
