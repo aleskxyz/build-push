@@ -1,4 +1,4 @@
-name: Build and Push Docker Image to Container Registry
+name: build-push
 description: >
   Builds Docker images, adds tags/labels/annotations, and pushes them to a registry, running rootless in ARC on Kubernetes.
 author: aleskxyz
